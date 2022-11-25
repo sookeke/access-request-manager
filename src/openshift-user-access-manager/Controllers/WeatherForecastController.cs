@@ -83,7 +83,7 @@ namespace UserAccessManager.Controllers
 
             var getSchema = _apiCurioRegistryClient.GetArtifactContentByGlobalIdAsync("17");
 
-            string token = "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";
+            string token = "";
             var github = new GitHubClient(new ProductHeaderValue("ocp-accessrequest"));
             github.Credentials = new Credentials(token);
             var user = await github.User.Get("sookeke");
