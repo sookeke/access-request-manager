@@ -1,13 +1,13 @@
 # access-request-manager
 
-##Actors
+## Actors
 - Requestor
 - Approver
 
 
 <img align="center" width="1110" src="doc/AARForm.PNG">
 
-###Workflow
+### Workflow
 - User submit openshift access request by filling the aar form
 - User set the request state to in progress
 - Once the request state changes to in progress, an approval request will be sent to the product owner and admin
@@ -17,7 +17,7 @@
 - If the approver deny the request, the approves state is set to rejected
 
 
-###Event Sourcing
+### Event Sourcing
 - All the aboove work flows generate an individual state events into the kafka topic (topic name = prefix.aar_table_name)
 - The user manager service subscribes to this topic and consumes all generated state event published by the servicenow kafka connector
 - Un approved generated state events are ignored and offset committed by the consumer by a dedicated consumer group id
