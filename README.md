@@ -23,7 +23,7 @@
 
 
 ### Event Sourcing
-- All the aboove work flows generate an individual change events into a kafka topic (topic name = prefix.aar_table_name) and corresponding schema into the Apicurio Shema Resitry as published by [serviceNow kafka connector](/src/kafka-connect-servicenow) source
+- All the above work flows generate an individual change events into a kafka topic (topic name = prefix.aar_table_name) and corresponding schema into the Apicurio Shema Resitry as published by [serviceNow kafka connector](/src/kafka-connect-servicenow) source
 - The user manager service subscribes to this topic and consumes all generated change event
 - Un-approved state change events are ignored and offset auto committed by the consumer by a dedicated consumer group
 - Approved state change events are processed and a corresponding RBAC manifest are generated based on the submitted approved request
