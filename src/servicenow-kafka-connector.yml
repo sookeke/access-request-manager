@@ -1,0 +1,49 @@
+kind: KafkaConnector
+apiVersion: kafka.strimzi.io/v1beta2
+metadata:
+  name: servicenow-connector
+  labels:
+    strimzi.io/cluster: jpidp-debezium-cluster
+  namespace: 5b7aa5-test
+spec:
+  class: com.ibm.ingestion.connect.servicenow.ServiceNowSourceConnector
+  tasksMax: 1
+  config:
+    servicenow.client.base.uri: https://dev141657.service-now.com
+    servicenow.client.oauth.clientid: ddaccfbbd4871110419fd1e89562b5f9
+    servicenow.client.oauth.clientsecret: <redacted>
+    servicenow.client.oauth.username: admin
+    servicenow.client.oauth.userpassword: <redacted>
+    table.whitelist: x_939755_ops_openshift_user_access,change_request
+    table.whitelist.x_939755_ops_openshift_user_access.name: x_939755_ops_openshift_user_access
+    table.whitelist.x_939755_ops_openshift_user_access.timestamp.field.name: sys_updated_on
+    table.whitelist.x_939755_ops_openshift_user_access.identifier.field.name: sys_id
+    table.whitelist.x_939755_ops_openshift_user_access.partition.type: field-based
+    topic.prefix: ocp.access
+    timestamp.initial.query.hours.ago: 720
+    key.converter: io.apicurio.registry.utils.converter.ExtJsonConverter
+    key.converter.schemas.enable: "true"
+    key.converter.apicurio.registry.url: http://dems-apicurioregistry-kafkasql-service.5b7aa5-test.svc.cluster.local:8080
+    key.converter.apicurio.registry.global-id: io.apicurio.registry.serde.strategy.GetOrCreateIdStrategy
+    value.converter: io.apicurio.registry.utils.converter.ExtJsonConverter
+    value.converter.apicurio.registry.url: http://dems-apicurioregistry-kafkasql-service.5b7aa5-test.svc.cluster.local:8080
+    value.converter.apicurio.registry.global-id: io.apicurio.registry.serde.strategy.GetOrCreateIdStrategy 
+    key.converter.apicurio.registry.converter.serializer: "io.apicurio.registry.serde.avro.JsonSchemaKafkaSerializer"
+    key.converter.apicurio.registry.converter.deserializer: "io.apicurio.registry.serde.avro.JsonSchemaKafkaDeserializer"
+    value.converter.apicurio.registry.converter.serializer: "io.apicurio.registry.serde.avro.JsonSchemaKafkaSerializer"
+    value.converter.apicurio.registry.converter.deserializer: "io.apicurio.registry.serde.avro.JsonSchemaKafkaDeserializer"
+    key.converter.apicurio.registry.auto-register: "true"
+    key.converter.apicurio.registry.find-latest: "true"
+    key.converter.apicurio.registry.as-confluent: "true"
+    value.converter.apicurio.registry.auto-register: "true"
+    value.converter.apicurio.registry.find-latest: "true"
+    value.converter.apicurio.registry.as-confluent: "true"             
+    key.converter.apicurio.auth.service.url: "https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth"
+    key.converter.apicurio.auth.realm: "DEMSPOC"
+    key.converter.apicurio.auth.client.id: "registry-client-api"
+    key.converter.apicurio.auth.client.secret: "<redacted>"
+    value.converter.apicurio.auth.service.url: "https://sso-dev-5b7aa5-dev.apps.silver.devops.gov.bc.ca/auth"
+    value.converter.apicurio.auth.realm: "DEMSPOC"
+    value.converter.apicurio.auth.client.id: "registry-client-api"
+    value.converter.apicurio.auth.client.secret: "<redacted>"
+    
