@@ -34,6 +34,13 @@
 	<img align="center" width="1110" src="doc/aar-succes.png">
 - If the result is a failure, the work note field will be updated with the corresponding failure message and state set to pending for possible user resubmission 
 		<img align="center" width="1110" src="doc/aar-fail.png">
+		
 
+### Change Event Payload
+<img align="center" width="1110" src="doc/EventPayload.png">
+
+### Event Schema
+- JSON
+<img align="center" width="1110" src="doc/schema.PNG">
 
 
