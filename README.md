@@ -31,4 +31,6 @@
 - If the result is a failure, the work note field will be updated with the corresponding failure message and state set to pending for retrial 
 		<img align="center" width="1110" src="doc/aar-fail.png">
 
+
+### Solution Architecture
 <img align="center" width="1110" src="doc/user access manager.drawio.png">
