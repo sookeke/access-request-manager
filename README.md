@@ -1,5 +1,9 @@
 # access-request-manager
 
+
+## Solution Architecture
+<img align="center" width="1110" src="doc/user access manager.drawio.png">
+
 ## Actors
 - Requestor
 - Approver
@@ -32,5 +36,4 @@
 		<img align="center" width="1110" src="doc/aar-fail.png">
 
 
-### Solution Architecture
-<img align="center" width="1110" src="doc/user access manager.drawio.png">
+
