@@ -44,4 +44,4 @@ ImmediateConsumerRetry = Policy.HandleResult<Task>(
     }
   }
   ```
-<img align="center" width="1110" src="../../../../../doc/retryPolicy.drawio.png">
+<img align="center" width="2110" src="../../../../../doc/retryPolicy.drawio.png">
