@@ -4,6 +4,7 @@ using UserAccessManager.Extensions;
 using UserAccessManager.Services.Kafka;
 using UserAccessManager.Services.ServiceNow;
 using ServiceNow.Api;
+using Octokit;
 
 namespace UserAccessManager.Services.HttpClients;
 public static class HttpClientSetup
@@ -29,16 +30,10 @@ public static class HttpClientSetup
                 httpClient.SetBasicAuthentication(config.ServiceNow.UserName, config.ServiceNow.Password);
             });
 
-        //services.AddHttpClient<ServiceNowClient>()
-        //    .ConfigureHttpClient(httpClient =>
-        //{
-        //    httpClient.BaseAddress = new Uri(config.ServiceNow.ApiUrl);
-        //    httpClient.DefaultRequestHeaders.Add(
-        //       HeaderNames.Accept, "application/json");
-        //    httpClient.DefaultRequestHeaders.Add(
-        //        HeaderNames.Authorization, "basic");
-        //    httpClient.SetBasicAuthentication(config.ServiceNow.UserName, config.ServiceNow.Password);
-        //});
+        services.AddSingleton(new GitHubClient(new ProductHeaderValue("ocp-accessrequest"))
+        {
+            Credentials = new Credentials(config.GithubClient.PersonalAccessToken)
+        });
 
         return services;
     }

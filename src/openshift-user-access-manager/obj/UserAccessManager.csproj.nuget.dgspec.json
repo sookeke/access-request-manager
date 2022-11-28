@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sookeke\\openshift-access-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj": {}
+    "H:\\access-request-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sookeke\\openshift-access-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj": {
+    "H:\\access-request-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sookeke\\openshift-access-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj",
+        "projectUniqueName": "H:\\access-request-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj",
         "projectName": "UserAccessManager",
-        "projectPath": "C:\\Users\\sookeke\\openshift-access-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj",
+        "projectPath": "H:\\access-request-manager\\src\\openshift-user-access-manager\\UserAccessManager.csproj",
         "packagesPath": "C:\\Users\\sookeke\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sookeke\\openshift-access-manager\\src\\openshift-user-access-manager\\obj\\",
+        "outputPath": "H:\\access-request-manager\\src\\openshift-user-access-manager\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

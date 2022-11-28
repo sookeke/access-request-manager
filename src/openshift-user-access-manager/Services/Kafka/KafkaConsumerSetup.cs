@@ -1,6 +1,9 @@
 ﻿using Confluent.Kafka;
 using UserAccessManager.Extensions;
 using UserAccessManager.Models;
+using UserAccessManager.Services.Kafka.Consumer;
+using UserAccessManager.Services.Kafka.Consumer.ConsumerRetry;
+using UserAccessManager.Services.Kafka.Models;
 
 namespace UserAccessManager.Services.Kafka;
 
@@ -10,9 +13,6 @@ public static class KafkaConsumerSetup
     {
         services.ThrowIfNull(nameof(services));
         config.ThrowIfNull(nameof(config));
-        //var serviceProvider = services.BuildServiceProvider();
-        //var logger = serviceProvider.GetService<ILogger<UserProvisioningHandler>>();
-        //services.AddSingleton(typeof(ILogger), logger);
 
         var clientConfig = new ClientConfig()
         {
@@ -23,21 +23,30 @@ public static class KafkaConsumerSetup
             SaslOauthbearerMethod = SaslOauthbearerMethod.Oidc,
             SaslOauthbearerScope = "oidc",
             SslEndpointIdentificationAlgorithm = SslEndpointIdentificationAlgorithm.Https,
-            SslCaLocation = config.KafkaCluster.SslCaLocation
-            //SslCertificateLocation = config.KafkaCluster.SslCertificateLocation,
-            //SslKeyLocation = config.KafkaCluster.SslKeyLocation
+            SslCaLocation = config.KafkaCluster.SslCaLocation,
         };
-        var producerConfig = new ProducerConfig(clientConfig)
+        var producerConfig = new ProducerConfig
         {
             Acks = Acks.All,
+            BootstrapServers = config.KafkaCluster.BoostrapServers,
             SaslOauthbearerClientId = config.KafkaCluster.SaslOauthbearerProducerClientId,
             SaslOauthbearerClientSecret = config.KafkaCluster.SaslOauthbearerProducerClientSecret,
-            EnableIdempotence = true
+            SaslMechanism = SaslMechanism.OAuthBearer,
+            SecurityProtocol = SecurityProtocol.SaslSsl,
+            SaslOauthbearerTokenEndpointUrl = config.KafkaCluster.SaslOauthbearerTokenEndpointUrl,
+            SaslOauthbearerMethod = SaslOauthbearerMethod.Oidc,
+            SaslOauthbearerScope = "oidc",
+            SslEndpointIdentificationAlgorithm = SslEndpointIdentificationAlgorithm.Https,
+            SslCaLocation = config.KafkaCluster.SslCaLocation,
+            SslCertificateLocation = config.KafkaCluster.SslCertificateLocation,
+            EnableIdempotence = true,
+            RetryBackoffMs = 1000,
+            MessageSendMaxRetries = 5
         };
-
+        
         var consumerConfig = new ConsumerConfig(clientConfig)
         {
-            GroupId = "ocp-accessrequest-consumer-group",
+            GroupId = "ocp-accessrequest-consumer-group2",
             EnableAutoCommit = true,
             AutoOffsetReset = AutoOffsetReset.Earliest,
             SaslOauthbearerClientId = config.KafkaCluster.SaslOauthbearerConsumerClientId,
@@ -46,19 +55,22 @@ public static class KafkaConsumerSetup
             AutoCommitIntervalMs = 4000,
             BootstrapServers = config.KafkaCluster.BoostrapServers,
             SaslMechanism = SaslMechanism.OAuthBearer,
-            SecurityProtocol = SecurityProtocol.SaslSsl
+            SecurityProtocol = SecurityProtocol.SaslSsl            
         };
-        //var producerConfig = new ProducerConfig(clientConfig);
-        services.AddSingleton(consumerConfig);
+       
         services.AddSingleton(producerConfig);
 
 
-        //services.AddSingleton(consumerConfig);
+        services.AddSingleton(consumerConfig);
 
-        services.AddScoped<IKafkaHandler<string, AccessRequest>, UserProvisioningHandler>();
+        services.AddScoped<IKafkaHandler<string, AccessRequest>, UserProvisioningHandler>();  
         services.AddSingleton(typeof(IKafkaConsumer<,>), typeof(KafkaConsumer<,>));
+        services.AddSingleton(typeof(IKafkaProducer<,>), typeof(KafkaProducer<,>));
         services.AddScoped<RetryPolicy>();
         services.AddHostedService<UserManagerServiceConsumer>();
+
+        services.AddScoped<IKafkaHandler<string, RetryAccessRequest>, RetryProvisioningHandler>();
+        services.AddHostedService<UserManagerRetryServiceConsumer>();
 
         return services;
     }

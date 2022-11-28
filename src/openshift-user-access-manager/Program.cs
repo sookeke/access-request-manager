@@ -4,6 +4,7 @@ using UserAccessManager.Services.Kafka;
 using Serilog;
 using System.Reflection;
 using System.Text.Json;
+using UserAccessManager.Services.Kafka.Consumer.ConsumerRetry;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,7 +38,7 @@ AccessRequestConfiguration InitializeConfiguration(IServiceCollection services)
 
 builder.Services.AddKafkaConsumer(config)
     .AddHttpClients(config)
-    .AddSingleton(new RetryPolicy())
+    .AddSingleton(new RetryPolicy(config))
     .AddSingleton<Microsoft.Extensions.Logging.ILogger>(svc => svc.GetRequiredService<ILogger<UserProvisioningHandler>>());
 
 builder.Services.AddOptions();

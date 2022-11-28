@@ -1,7 +1,7 @@
 ﻿using UserAccessManager.Models;
 using System.Net;
 
-namespace UserAccessManager.Services.Kafka
+namespace UserAccessManager.Services.Kafka.Consumer
 {
     public class UserManagerServiceConsumer : BackgroundService
     {
@@ -10,25 +10,25 @@ namespace UserAccessManager.Services.Kafka
         private readonly AccessRequestConfiguration config;
         public UserManagerServiceConsumer(IKafkaConsumer<string, AccessRequest> kafkaConsumer, AccessRequestConfiguration config)
         {
-            this.consumer = kafkaConsumer;
+            consumer = kafkaConsumer;
             this.config = config;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             try
             {
-                await this.consumer.Consume(this.config.KafkaCluster.ConsumerTopicName, stoppingToken);
+                await consumer.Consume(new List<string> { config.KafkaCluster.ConsumerTopicName }, stoppingToken);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"{(int)HttpStatusCode.InternalServerError} ConsumeFailedOnTopic - {this.config.KafkaCluster.ConsumerTopicName}, {ex}");
+                Console.WriteLine($"{(int)HttpStatusCode.InternalServerError} ConsumeFailedOnTopic - {config.KafkaCluster.ConsumerTopicName}, {ex}");
             }
         }
 
         public override void Dispose()
         {
-            this.consumer.Close();
-            this.consumer.Dispose();
+            consumer.Close();
+            consumer.Dispose();
 
             base.Dispose();
             GC.SuppressFinalize(this);

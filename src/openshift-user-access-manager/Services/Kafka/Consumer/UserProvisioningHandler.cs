@@ -4,6 +4,7 @@ using UserAccessManager.Models;
 using UserAccessManager.Services.Kafka.Models;
 using UserAccessManager.Services.ServiceNow;
 using Octokit;
+using UserAccessManager.Services.Kafka.Consumer;
 
 namespace UserAccessManager.Services.Kafka;
 public class UserProvisioningHandler : IKafkaHandler<string, AccessRequest>
@@ -11,18 +12,19 @@ public class UserProvisioningHandler : IKafkaHandler<string, AccessRequest>
     private readonly IServiceNowTableClient serviceNow;
     private readonly ILogger logger;
     private readonly AccessRequestConfiguration config;
-    public UserProvisioningHandler(IServiceNowTableClient serviceNow, ILogger logger, AccessRequestConfiguration config)
+    private readonly IKafkaProducer<string, RetryAccessRequest> producer;
+    public UserProvisioningHandler(IServiceNowTableClient serviceNow, ILogger logger, AccessRequestConfiguration config, IKafkaProducer<string, RetryAccessRequest> producer)
     {
         this.serviceNow = serviceNow;
         this.logger = logger;
         this.config = config;
+        this.producer = producer;
     }
     public async Task<Task> HandleAsync(string consumerName, string key, AccessRequest value)
     {
         if (value.payload.state != State.Approved.ToLower())
         {
             logger.LogNotApproved(value.payload.requested_for, value.payload.state, consumerName);
-            //return Task.FromException(new InvalidDataException());
             return Task.CompletedTask; //process and do nothing
         }
         try
@@ -46,16 +48,12 @@ public class UserProvisioningHandler : IKafkaHandler<string, AccessRequest>
 
                 if (!string.IsNullOrEmpty(accessRequestYmlObject))
                 {
-                    //string nameSpace = $"{value.payload.openshift_namespace.ToLower()}-{value.payload.environment.ToLower().Split(',').ToList().Where(n => n == "dev").First()}";
-
                     var owner = this.config.GithubClient.RepositoryOwner;
                     var repoName = this.config.GithubClient.RepositoryName;
                     var filePath = $"{value.payload.openshift_cluster}/{value.payload.openshift_namespace}/{env}.yml";
                     var branch = this.config.GithubClient.Branch;
 
                     IReadOnlyList<RepositoryContent>? fileDetails;
-
-
                     try
                     {
                         fileDetails = await github.Repository.Content.GetAllContentsByRef(owner, repoName, filePath, branch);
@@ -92,7 +90,37 @@ public class UserProvisioningHandler : IKafkaHandler<string, AccessRequest>
         }
         catch (Exception e)
         {
-            var o = await serviceNow.UpdateServiceNowTable(config.ServiceNow.TableName, value.payload.sys_id, new AccessRequestDto() { state = State.Pending, sys_id = value.payload.sys_id, work_notes = $"We cannot process your request due to the following error {e.Message}/n Please, try again" });
+            await this.producer.ProduceAsync(config.KafkaCluster.InitialRetryTopicName, value.payload.sys_id, new RetryAccessRequest
+            {
+                payload = new Models.Payload
+                {
+                    request_last_name = value.payload.request_last_name,
+                    requested_role =value.payload.requested_role,
+                     product_owner =value.payload.product_owner,
+                     openshift_cluster =value.payload.openshift_cluster,
+                     sys_mod_count =value.payload.sys_mod_count,
+                     description =value.payload.description,
+                     requested_for =value.payload.requested_for,
+                     sys_updated_on =value.payload.sys_updated_on,
+                    sys_tags =value.payload.sys_tags,
+                     openshift_namespace =value.payload.openshift_namespace,
+                     approval_history =value.payload.approval_history,
+                    sys_id =value.payload.sys_id,
+                     approved_by =value.payload.approved_by,
+                    environment =value.payload.environment,
+                    requested_by =value.payload.requested_by,
+                     sys_updated_by =value.payload.request_last_name,
+                     sys_created_on =value.payload.sys_created_on,
+                    approved_b0 =value.payload.approved_b0,
+                    state =value.payload.state,
+                     work_notes =value.payload.work_notes,
+                   sys_created_by =value.payload.sys_created_by,
+                },
+                schemaId = value.schemaId,
+                retryNumber = 5,
+                retryDuration = TimeSpan.FromSeconds(5)
+            });
+            var o = await serviceNow.UpdateServiceNowTable(config.ServiceNow.TableName, value.payload.sys_id, new AccessRequestDto() { state = State.Queued, sys_id = value.payload.sys_id, work_notes = $"Something went wrong during access provoisioning. We will try again later and let you know" });
             logger.LogUserAccessError(e);
         }
 
@@ -195,12 +223,14 @@ public class UserProvisioningHandler : IKafkaHandler<string, AccessRequest>
         }
         catch (Exception e)
         {
-            await serviceNow.UpdateServiceNowTable(configuration.ServiceNow.TableName, value.payload.sys_id, new AccessRequestDto() { state = State.Pending, sys_id = value.payload.sys_id, work_notes = $"We cannot process your request due to the following error {e.Message}/n Please, try again" });          
-            logger.LogUserAccessError(e);
-            return string.Empty;
+            throw new Exception(e.Message);
         }
     }
-    
+
+    public Task<Task> HandleRetryAsync(string consumerName, string key, AccessRequest value, int retryCount, string topicName)
+    {
+        throw new NotImplementedException();
+    }
 }
 public static partial class UserProvisioningHandlerLoggingExtensions
 {
@@ -213,4 +243,9 @@ public static partial class UserProvisioningHandlerLoggingExtensions
 
     [LoggerMessage(4, LogLevel.Information, "User {user} already has {role} to {env}")]
     public static partial void LogUserAlreadyProvisioned(this ILogger logger, string? user, string role, string env);
+    [LoggerMessage(5, LogLevel.Warning, "Cannot provisioned {user} account. Published {sysId} cloned record for to {topic} topic for retrial")]
+    public static partial void LogUserAccessPublishError(this ILogger logger, string? user, string sysId, string topic);
+    [LoggerMessage(1, LogLevel.Error, "Error provisioning user {sysId} after final retry")]
+    public static partial void LogUserAccessRetryError(this ILogger logger, string sysId);
+
 }

@@ -1,4 +1,6 @@
-﻿namespace UserAccessManager.Services.Kafka;
+﻿using Microsoft.AspNetCore.SignalR.Protocol;
+
+namespace UserAccessManager.Services.Kafka;
 public class AccessRequestConfiguration
 {
     public static bool IsProduction() => EnvironmentName == Environments.Production;
@@ -9,7 +11,7 @@ public class AccessRequestConfiguration
     public KafkaClusterConfiguration KafkaCluster { get; set; } = new();
     public ServiceNowConfiguration ServiceNow { get; set; } = new();
     public GithubClientConfiguration GithubClient { get; set; } = new();
-
+    public RetryPolicyConfiguration RetryPolicy { get; set; } = new(); 
     public KubernateConfigConfiguration KubernateConfig { get; set; } = new();
 
     // ------- Configuration Objects -------
@@ -48,8 +50,10 @@ public class AccessRequestConfiguration
         public string ClientId { get; set; } = string.Empty;
         public string ClientSecret { get; set; } = string.Empty;
         public string BoostrapServers { get; set; } = string.Empty;
+        public string FinalRetryTopic { get; set; } = string.Empty; 
+        public string MidRetryTopicName { get; set; } = string.Empty;
         public string ConsumerTopicName { get; set; } = string.Empty;
-        public string ProducerTopicName { get; set; } = string.Empty;
+        public string InitialRetryTopicName { get; set; } = string.Empty;
         public string SaslOauthbearerTokenEndpointUrl { get; set; } = string.Empty;
         public string SaslOauthbearerProducerClientId { get; set; } = string.Empty;
         public string SaslOauthbearerProducerClientSecret { get; set; } = string.Empty;
@@ -58,5 +62,28 @@ public class AccessRequestConfiguration
         public string SslCaLocation { get; set; } = string.Empty;
         public string SslCertificateLocation { get; set; } = string.Empty;
         public string SslKeyLocation { get; set; } = string.Empty;
+    }
+    public class FinalRetryTopicName
+    {
+        public int RetryCount { get; set; }
+        public int WaitAfterInMins { get; set; }
+    }
+    public class MidRetryTopicName
+    {
+        public int RetryCount { get; set; }
+        public int WaitAfterInMins { get; set; }
+    }
+
+    public class InitialRetryTopicName
+    {
+        public int RetryCount { get; set; }
+        public int WaitAfterInMins { get; set; }
+    }
+
+    public class RetryPolicyConfiguration
+    {
+        public InitialRetryTopicName InitialRetryTopicName { get; set; } = new();
+        public FinalRetryTopicName FinalRetryTopicName { get; set; } = new();
+        public MidRetryTopicName MidRetryTopicName { get; set; } = new();
     }
 }
