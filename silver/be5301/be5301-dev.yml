@@ -1,0 +1,205 @@
+apiVersion: rbac.authorization.k8s.io/v1
+items:
+- metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{},"labels":{"devops.gov.bc.ca/argocd-app-shared":"jag-rbac-be5301"},"name":"agpssgisb-admin","namespace":"be5301-dev"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"admin"},"subjects":[{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"mahoneyg@github"}]}
+    creationTimestamp: 2021-12-01T09:19:15.0000000Z
+    labels:
+      devops.gov.bc.ca/argocd-app-shared: jag-rbac-be5301
+    managedFields:
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: oc
+      operation: Update
+      time: 2021-12-01T09:19:15.0000000Z
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: argocd-application-controller
+      operation: Update
+      time: 2022-09-16T08:36:02.0000000Z
+    name: agpssgisb-admin
+    namespace: be5301-dev
+    resourceVersion: "4549774430"
+    uid: e1db3ce1-10e8-45bb-b243-fda4d52c1d2b
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: admin
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: mahoneyg@github
+- metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{},"labels":{"devops.gov.bc.ca/argocd-app-shared":"jag-rbac-be5301"},"name":"devops-admin","namespace":"be5301-dev"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"admin"},"subjects":[{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"cstodgell@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"mohammedalhassan@github"}]}
+    creationTimestamp: 2021-12-01T09:19:15.0000000Z
+    labels:
+      devops.gov.bc.ca/argocd-app-shared: jag-rbac-be5301
+    managedFields:
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: oc
+      operation: Update
+      time: 2021-12-01T09:19:15.0000000Z
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: argocd-application-controller
+      operation: Update
+      time: 2022-09-16T08:36:02.0000000Z
+    name: devops-admin
+    namespace: be5301-dev
+    resourceVersion: "4549774438"
+    uid: fde97949-2fa4-4814-a0db-68e68afff1e6
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: admin
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: cstodgell@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: mohammedalhassan@github
+- metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{},"labels":{"devops.gov.bc.ca/argocd-app-shared":"jag-rbac-be5301"},"name":"devops-edit","namespace":"be5301-dev"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"edit"},"subjects":[{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"scotttowne@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"sukhbirghotra@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"stevef4@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"vesselofgold@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"amlanc1@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"mreaugusto@github"}]}
+    creationTimestamp: 2021-12-01T09:19:15.0000000Z
+    labels:
+      devops.gov.bc.ca/argocd-app-shared: jag-rbac-be5301
+    managedFields:
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: oc
+      operation: Update
+      time: 2021-12-01T09:19:15.0000000Z
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: argocd-application-controller
+      operation: Update
+      time: 2022-10-20T19:31:22.0000000Z
+    name: devops-edit
+    namespace: be5301-dev
+    resourceVersion: "4846623550"
+    uid: 035422d8-ef71-40a8-941c-7f4c75ee7211
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: edit
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: scotttowne@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: sukhbirghotra@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: stevef4@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: vesselofgold@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: amlanc1@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: mreaugusto@github
+- metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{},"name":"devops-view","namespace":"be5301-dev"},"roleRef":{"kind":"ClusterRole","name":"view"},"subjects":[{"kind":"User","name":"mohammedalhassan@github"}]}
+    creationTimestamp: 2021-12-01T09:19:16.0000000Z
+    managedFields:
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: oc
+      operation: Update
+      time: 2021-12-01T09:19:16.0000000Z
+    name: devops-view
+    namespace: be5301-dev
+    resourceVersion: "2220097098"
+    uid: 61acc4fc-7f05-44fe-86b2-2ee124b90ebc
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: view
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: mohammedalhassan@github
+- metadata:
+    annotations:
+      kubectl.kubernetes.io/last-applied-configuration: |
+        {"apiVersion":"rbac.authorization.k8s.io/v1","kind":"RoleBinding","metadata":{"annotations":{},"labels":{"devops.gov.bc.ca/gitops-app":"be5301","environment":"dev","name":"be5301","provisioned-by":"argocd"},"name":"platform-services-controlled-admin","namespace":"be5301-dev"},"roleRef":{"apiGroup":"rbac.authorization.k8s.io","kind":"ClusterRole","name":"admin"},"subjects":[{"kind":"ServiceAccount","name":"bcdevops-admin","namespace":"openshift"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"ag-pssg-isb-sa@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"rloisell@github"},{"apiGroup":"rbac.authorization.k8s.io","kind":"User","name":"sookeke@github"}]}
+    creationTimestamp: 2021-03-03T18:07:31.0000000Z
+    labels:
+      devops.gov.bc.ca/gitops-app: be5301
+      environment: dev
+      name: be5301
+      provisioned-by: argocd
+    managedFields:
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: Go-http-client
+      operation: Update
+      time: 2022-11-23T01:33:51.0000000Z
+    - apiVersion: rbac.authorization.k8s.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        valueKind: Object
+      manager: argocd-application-controller
+      operation: Update
+      time: 2022-11-23T01:33:51.0000000Z
+    name: platform-services-controlled-admin
+    namespace: be5301-dev
+    resourceVersion: "5122707123"
+    uid: 7fe87671-efa8-40b2-abcc-cadc26a3c259
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: admin
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: ag-pssg-isb-sa@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: rloisell@github
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: sookeke@github
+- metadata:
+    labels:
+      dev141657.service-now.com: jag-rbac-be5301-dev
+      approved by Carmella Wishman: jag-rbac-be5301-dev
+    name: devops_admin
+    namespace: be5301-dev
+  roleRef:
+    apiGroup: rbac.authorization.k8s.io
+    kind: ClusterRole
+    name: admin
+  subjects:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: christa.bodenschatz@example.com
+    namespace: be5301-dev
