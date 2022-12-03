@@ -154,8 +154,8 @@ items:
 - metadata:
     labels:
       dev141657.service-now.com: jag-rbac-973905-dev
-      approved by Alyssa Biasotti: jag-rbac-973905-dev
-    name: agpssgisb_admin
+      approved by Carmella Wishman: jag-rbac-973905-dev
+    name: devops_admin
     namespace: 973905-dev
   roleRef:
     apiGroup: rbac.authorization.k8s.io
@@ -164,5 +164,5 @@ items:
   subjects:
   - apiGroup: rbac.authorization.k8s.io
     kind: User
-    name: carmella.wishman@example.com
+    name: christa.bodenschatz@example.com
     namespace: 973905-dev
