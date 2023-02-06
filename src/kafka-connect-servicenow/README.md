@@ -112,9 +112,9 @@ table.whitelist.`<table config id>`.partition.fields | none | Only valid for par
 
 ```$json
 {
-    "name": "milz-servicenow-connector",
+    "name": "aar-servicenow-connector",
     "config": {
-        "servicenow.client.base.uri": "https://ibmmhasdev4.service-now.com",
+        "servicenow.client.base.uri": "https://aar.service-now.com",
         "servicenow.client.oauth.clientid": "clientid",
         "servicenow.client.oauth.clientsecret": "clientsecret",
         "servicenow.client.oauth.username": "someusername",
